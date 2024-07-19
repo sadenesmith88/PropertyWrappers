@@ -9,17 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var count: Int = 0
+  //storage for data update user interface using data
+  //ui reflects what is in state
+  //must be in sync to get swiftui working correctly
+  @State private var isOn: Bool = false
+
+
     
     var body: some View {
-        VStack {
-            Text("Hello World!")
-            Text("\(count)")
-                .font(.largeTitle)
-            Button("Increment") {
-                count += 1
-            }
-        }
+      VStack {
+        Toggle(isOn: $isOn, label: {
+          Text(isOn ? "ON": "OFF")
+        }).fixedSize()
+      }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(isOn ? .yellow: .purple)
     }
 }
 
