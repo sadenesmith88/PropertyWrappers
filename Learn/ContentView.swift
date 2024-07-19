@@ -7,43 +7,36 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct LightBulbView: View {
 
-  //storage for data update user interface using data
-  //ui reflects what is in state
-  //must be in sync to get swiftui working correctly
-  @State private var search: String = ""
-  @State private var friends: [String] = ["John", "Joe", "Jenn", "Josh"]
-  @State private var filteredFriends: [String] = []
+  @Binding  var isOn: Bool
+
   var body: some View {
     VStack {
-      //display frineds array
-      List(filteredFriends, id: \.self) { friend in
-        Text(friend)
+      Image(systemName: isOn ? "lightbulb.fill": "lightbulb")
+        .foregroundStyle(isOn ? .yellow: .black)
+        .font(.largeTitle)
+      Button("Toggle") {
+        isOn.toggle()
       }
-      .listStyle(.plain)
-      .searchable(text: $search)
-      .onChange(of: search) {
-        if search.isEmpty {
-          filteredFriends = friends
-        } else {
-          filteredFriends = friends.filter { $0.contains(search) }
+    }
+  }
+}
 
-        }
-      }
+struct ContentView: View {
 
-      Spacer()
-    }.padding()
-      .onAppear(perform: {
-        //initial value of filtered friends
-        filteredFriends = friends
-      })
-      .navigationTitle("Friends List")
+  @State private var isLightOn: Bool = false
+
+  var body: some View {
+    VStack {
+      LightBulbView(isOn: $isLightOn )
+    }
+    .padding()
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(isLightOn ? .black: .white )
   }
 }
 
 #Preview {
-  NavigationStack {
     ContentView()
-  }
 }
