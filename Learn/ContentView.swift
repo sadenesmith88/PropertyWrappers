@@ -6,16 +6,19 @@
 //
 
 import SwiftUI
+import Observation
 
+@Observable
 class AppState: ObservableObject {
-  @Published var isOn: Bool = false
+   var isOn: Bool = false
 }
 
 struct LightBulbView: View {
 
-  @EnvironmentObject private var appState: AppState
+  @Environment(AppState.self) private var appState: AppState
 
   var body: some View {
+
     VStack {
       Image(systemName: appState.isOn ? "lightbulb.fill": "lightbulb")
         .foregroundStyle(appState.isOn ? .yellow: .black)
@@ -37,7 +40,7 @@ struct LightRoomView: View {
 }
 
 struct ContentView: View {
-  @EnvironmentObject private var appState: AppState
+  @Environment(AppState.self) private var appState: AppState
 
 
 
@@ -53,5 +56,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-    .environmentObject(AppState())
+    .environment(AppState())
 }
