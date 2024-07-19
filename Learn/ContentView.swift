@@ -12,31 +12,38 @@ struct ContentView: View {
   //storage for data update user interface using data
   //ui reflects what is in state
   //must be in sync to get swiftui working correctly
-  @State private var name: String = ""
-  @State private var friends: [String] = []
-
-
-
+  @State private var search: String = ""
+  @State private var friends: [String] = ["John", "Joe", "Jenn", "Josh"]
+  @State private var filteredFriends: [String] = []
   var body: some View {
     VStack {
-      TextField("Enter name", text: $name)
-        .textFieldStyle(.roundedBorder)
-        .onSubmit {
-          friends.append(name)
-          name = ""
-        }
-
       //display frineds array
-      List(friends, id: \.self) { friend in
+      List(filteredFriends, id: \.self) { friend in
         Text(friend)
       }
+      .listStyle(.plain)
+      .searchable(text: $search)
+      .onChange(of: search) {
+        if search.isEmpty {
+          filteredFriends = friends
+        } else {
+          filteredFriends = friends.filter { $0.contains(search) }
 
+        }
+      }
 
       Spacer()
     }.padding()
+      .onAppear(perform: {
+        //initial value of filtered friends
+        filteredFriends = friends
+      })
+      .navigationTitle("Friends List")
   }
 }
 
 #Preview {
+  NavigationStack {
     ContentView()
+  }
 }
